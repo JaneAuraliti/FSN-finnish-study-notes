@@ -93,7 +93,7 @@ label.chk{display:flex;gap:8px;align-items:center;margin-left:8px}
 .next{margin-top:18px;display:flex;gap:10px;align-items:center}
 .again{font-size:13px;color:var(--muted)}
 /* rule panel */
-.panel{position:fixed;top:0;right:0;height:100%;width:min(520px,100%);background:var(--card);border-left:1.5px solid var(--line);box-shadow:-12px 0 30px rgba(27,42,65,.12);padding:26px 28px;overflow:auto;transform:translateX(105%);transition:transform .22s}
+.panel{position:fixed;z-index:50;top:0;right:0;height:100%;width:min(520px,100%);background:var(--card);border-left:1.5px solid var(--line);box-shadow:-12px 0 30px rgba(27,42,65,.12);padding:26px 28px;overflow:auto;transform:translateX(105%);transition:transform .22s}
 .panel.open{transform:none}
 .panel h3{font-size:22px;margin:0 0 4px}
 .panel .meta{color:var(--muted);font-size:13px;margin:0 0 14px}
@@ -102,6 +102,10 @@ label.chk{display:flex;gap:8px;align-items:center;margin-left:8px}
 .panel th{background:var(--snow)}
 .panel p{margin:8px 0}
 .panel .close{float:right}
+.panel .closebar{position:sticky;top:calc(-1 * (16px + env(safe-area-inset-top)));z-index:2;margin:0 0 6px;padding:6px 0;background:var(--card);text-align:right}
+.panel .closebar .close{float:none}
+.panel .closebot{margin:22px 0 8px;text-align:center}
+.panel .closebot .ghost{width:100%;padding:12px}
 /* summary */
 .score{font-size:44px;font-weight:700;margin:0}
 .map{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
@@ -371,7 +375,7 @@ function md(src){
     if(n===0&&l.startsWith("# "))h+=`<h3>${inl(l.slice(2))}</h3>`;else if(n===1&&/тег /.test(l))h+=`<p class="meta">${inl(l)}</p>`;else if(l.trim())h+=`<p>${inl(l)}</p>`});
   flush();return h;
 }
-function openRule(tag){const p=$("#panel");p.innerHTML=`<button class="ghost close" onclick="closeRule()">Закрыть</button>`+(RULES[tag]?md(RULES[tag]):"<h3>Правило ещё не добавлено</h3>");
+function openRule(tag){const p=$("#panel");p.innerHTML=`<div class="closebar"><button class="ghost close" onclick="closeRule()">Закрыть ✕</button></div>`+(RULES[tag]?md(RULES[tag]):"<h3>Правило ещё не добавлено</h3>")+`<p class="closebot"><button class="ghost" onclick="closeRule()">Закрыть правило</button></p>`;p.scrollTop=0;
   p.classList.add("open");p.setAttribute("aria-hidden","false");p.querySelector(".close").focus()}
 function closeRule(){const p=$("#panel");p.classList.remove("open");p.setAttribute("aria-hidden","true")}
 document.addEventListener("keydown",ev=>{
